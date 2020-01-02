@@ -4,8 +4,9 @@ var app = express();
 var grpcClient = require('./grpc-client');
 
 
-app.get('/', function (req, res) {
-    res.json(grpcClient.greeting())
+app.get('/:name', async function (req, res) {
+    let response = await grpcClient.greeting(req);
+    return res.send(response);
 });
 
 app.listen(3001, function () {

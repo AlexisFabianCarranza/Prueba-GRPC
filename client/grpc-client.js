@@ -17,12 +17,13 @@ var greeting_proto = grpc.loadPackageDefinition(packageDefinition).greeting;
 
 
 exports.greeting = async function (req, res) {
-        var resAuthorization = null;
         try {
                 var client = new greeting_proto.GreetingService('0.0.0.0' + ':50051',
                     grpc.credentials.createInsecure());
                 return new Promise((resolve, reject) => {
-                        client.hello({},
+                        client.hello({
+                                name: req.params.name
+                            },
                             (error, response) => {
                                     if (error) {
                                             return reject(error);
