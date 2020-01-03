@@ -19,9 +19,11 @@ function main() {
     let server = new grpc.Server();
     server.addService(greeting_proto.GreetingService.service, {
         hello,
-        helloServerSide,
         helloBidirectional,
         helloClientSide
+    });
+    server.addService(greeting_proto.GreetingServiceServerSide.service, {
+        helloServerSide,
     });
     server.bind( '0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
     server.start();
@@ -35,8 +37,11 @@ function hello(call, callback) {
         })
 }
 
-function helloServerSide(call, callback) {
-    eteam.forEach(person => {
+async function helloServerSide(call, callback) {
+    await eteam.forEach(person => {
+            call.write( {
+                message: 'Hola querido ' + person + ' / Server Side Streaming'
+            });
             setTimeout(() => {
                 call.write( {
                     message: 'Hola querido ' + person + ' / Server Side Streaming'
@@ -44,7 +49,7 @@ function helloServerSide(call, callback) {
             }, 2000);
         }
     );
-    call.end();
+    //call.end();
 }
 
 function helloBidirectional(call, callback) {

@@ -58,17 +58,17 @@ function helloClientSide (req, res) {
 
 function helloServerSide (req, res) {
         try {
-                var client = new greeting_proto.GreetingService('0.0.0.0' + ':50051',
+                var client = new greeting_proto.GreetingServiceServerSide('0.0.0.0' + ':50051',
                     grpc.credentials.createInsecure());
-                return new Promise((resolve, reject) => {
-                        let call = client.helloServerSide();
+                return new Promise(async (resolve, reject) => {
+                        let call = client.helloServerSide({});
                         call.on('data', function(feature) {
                                 console.log(feature);
-                                res.send(feature.message)
+                                res.send(feature)
                         });
-                        call.on('end', function() {
-                                return res.send('Finalizo la comunicacion');
-                        });
+                        /*call.on('end', function() {
+                                res.send('Finalizo la comunicacion');
+                        });*/
                 });
         } catch (e) {
                 console.error(e);

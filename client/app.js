@@ -11,8 +11,8 @@ app.get('/simpleRPC/:name', async function (req, res) {
 });
 
 app.get('/serverSideStreamingRPC/', async function (req, res) {
-    let response = await helloServerSide(req);
-    return res.send(response);
+    let response = await helloServerSide(req, res);
+    return response;
 });
 
 app.get('/clientSideStreamingRPC/:name', async function (req, res) {
