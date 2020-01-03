@@ -11,5 +11,9 @@ message Person {
 }
 
 service GreetingService {
-    rpc hello (Person) returns (Greeting) {}
+    rpc hello (Person) returns (Greeting) {};
+    rpc helloClientSide (stream Person) returns (Greeting) {};
+    rpc helloServerSide (Person) returns (stream Greeting) {};
+    rpc helloBidirectional (stream Person) returns (Greeting) {};
 }
+

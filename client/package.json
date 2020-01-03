@@ -5,7 +5,7 @@
   "main": "grpc-client.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node server.js"
+    "dev": "node app.js"
   },
   "author": "",
   "license": "ISC",
