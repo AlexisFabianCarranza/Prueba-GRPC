@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  grpc-client:
+    build: "."
+    container_name: grpc-client
+    image: "grpc:grpc"
+    ports:
+      - "3001:3001"
+    restart: always
+  grpc-server:
+    build: "."
+    container_name: grpc-server
+    image: "grpc:grpc"
+    restart: always
+
+
