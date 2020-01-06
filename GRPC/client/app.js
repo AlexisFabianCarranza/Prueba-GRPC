@@ -6,7 +6,7 @@ const PORT = 3001;
 
 
 app.get('/simpleRPC/:name', async function (req, res) {
-    let response = await hello(req);
+    let response = await hello(req, res);
     return res.send(response);
 });
 
@@ -15,13 +15,13 @@ app.get('/serverSideStreamingRPC/', async function (req, res) {
     return response;
 });
 
-app.get('/clientSideStreamingRPC/:name', async function (req, res) {
-    let response = await helloClientSide(req);
+app.get('/clientSideStreamingRPC/', async function (req, res) {
+    let response = await helloClientSide(req, res);
     return res.send(response);
 });
 
-app.get('/bidirectionalStreamingRPC/:name', async function (req, res) {
-    let response = await helloBidirectional(req);
+app.get('/bidirectionalStreamingRPC/', async function (req, res) {
+    let response = await helloBidirectional(req, res);
     return res.send(response);
 });
 
