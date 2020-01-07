@@ -1,6 +1,6 @@
 FROM node:8
 
-COPY ["./client", "/usr/src/"]
+COPY ["./server", "/usr/src/"]
 
 COPY ["./greeting.proto", "/usr/"]
 

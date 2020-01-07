@@ -13,9 +13,9 @@ services:
   grpc-server:
     build:
       context: .
-      dockerfile: client/dockerfile-client.Dockerfile
+      dockerfile: server/dockerfile-server.Dockerfile
     container_name: grpc-server
     image: "grpc:grpc"
     ports:
-      - "3001:3001"
+      - "50051:50051"
     restart: always
