@@ -12,15 +12,11 @@ Debes tener instalado:
 ```bash
 git clone https://github.com/drnavia/poc-gql-apollo-srv.git
 ```
-2. Construir la imagen del contenedor con Docker Compose:
+2. Posicionarse sobre la carpeta GRPC y ejecutar el siguiente comando para contruir la imagen y el contenedor:
 ```bash
-docker-compose -f dc-grpc.yml build
+docker-compose -f dc-grpc.yml up --build -d
 ```
-3. Levantar el contenedor de la API:
-```bash
-docker-compose -f dc-grpc.yml up -d
-```
-4. Verificar que el contenedor se encuentre levantado:
+3. Verificar que el contenedor se encuentre levantado:
 ```bash
 docker-compose -f dc-grpc.yml ps
 ```
