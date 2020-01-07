@@ -4,7 +4,7 @@ services:
   grpc-client:
     build:
       context: .
-      dockerfile: dockerfile-client.Dockerfile
+      dockerfile: client/dockerfile-client.Dockerfile
     container_name: grpc-client
     image: "grpc:grpc"
     ports:
