@@ -4,6 +4,8 @@ const protoLoader = require('@grpc/proto-loader');
 const logger = require('simple-node-logger').createSimpleLogger();
 const eteam = ['Leo' , 'Rodri', 'Fran', 'Damian', 'Mati', 'Alex'];
 
+const IP_HOST = process.env.IP_HOST || '0.0.0.0';
+
 const packageDefinition = protoLoader.loadSync(
     PROTO_PATH,
     {
@@ -21,7 +23,7 @@ const greeting_proto = grpc.loadPackageDefinition(packageDefinition).greeting;
 function hello (req, res) {
         try {
                 logger.info('Comienza una comunicacion simple- Cliente');
-                const client = new greeting_proto.GreetingService('0.0.0.0' + ':50051',
+                const client = new greeting_proto.GreetingService(IP_HOST + ':50051',
                     grpc.credentials.createInsecure());
                 return new Promise((resolve, reject) => {
                         client.hello({
@@ -44,7 +46,7 @@ function helloClientSide (req, res) {
         try {
                 console.log('---------------------------------------------------------------------------------');
                 logger.info('Comienza el streaming del lado del cliente - Cliente');
-                const client = new greeting_proto.GreetingService('0.0.0.0' + ':50051',
+                const client = new greeting_proto.GreetingService(IP_HOST + ':50051',
                     grpc.credentials.createInsecure());
                 let call = client.helloClientSide(function(error) {
                         if (error) {
@@ -70,7 +72,7 @@ function helloServerSide (req, res) {
                 console.log('---------------------------------------------------------------------------------');
                 logger.info('Comienza el streaming del lado del servidor - Cliente');
                 let cont = 0;
-                const client = new greeting_proto.GreetingService('0.0.0.0' + ':50051',
+                const client = new greeting_proto.GreetingService(IP_HOST + ':50051',
                     grpc.credentials.createInsecure());
                 return new Promise(async (resolve, reject) => {
                         let call = client.helloServerSide({});
@@ -94,7 +96,7 @@ function helloBidirectional (req, res) {
         try {
                 console.log('---------------------------------------------------------------------------------');
                 logger.info('Comienza el streaming bidireccional - Cliente');
-                const client = new greeting_proto.GreetingService('0.0.0.0' + ':50051',
+                const client = new greeting_proto.GreetingService(IP_HOST + ':50051',
                     grpc.credentials.createInsecure());
                 let call = client.helloBidirectional(function(error) {
                         if (error) {
