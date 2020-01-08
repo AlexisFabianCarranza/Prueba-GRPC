@@ -8,14 +8,12 @@ io.on('connection', function (socket) {
 
     socket.on('persona', function (person, start) {
 
-        let end = new Date();
-        let startDate = new Date(start);
-        let diff = end - startDate;
         let message = 'Hola querido '  + person;
-        logger.info(message + "- " + diff);
+       // logger.info(message + "- " + diff);
+        socket.emit('persona', message,start);
     });
 
-    socket.emit('persona', "PUTO");
+
 });
 
 http.listen(3000, function () {

@@ -17,8 +17,11 @@ eteam.forEach(person => {
     }
 );
 
-socket.on('persona', function (person) {
+socket.on('persona', function (person,start) {
 
-
-    logger.info("PUUUUUUUUUUUUTO:"+person);
+    let end = new Date();
+    let startDate = new Date(start);
+    let diff = end - startDate;
+    let message = 'Hola querido '  + person;
+    logger.info(message + "- " + diff);
 });
