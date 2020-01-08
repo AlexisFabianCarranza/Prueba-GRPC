@@ -1,10 +1,11 @@
 var request = require('request');
+const IP_HOST = process.env.IP_HOST || '0.0.0.0';
 
 
 function hello(name) {
     let start =new Date();
     console.log(start)
-    return request('http://localhost:5001/hello?name=' + name, function (error, response, body) {
+    return request('http://'+IP_HOST+':5001/hello?name=' + name, function (error, response, body) {
         //console.log('error:', error); // Print the error if one occurred
         //console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         let end=new Date();
