@@ -10,6 +10,6 @@ async function getHello(name) {
 }
 
 app.listen(PORT, function () {
-    console.log('Example app listening on port ' + PORT);
+    console.log('app listening on port ' + PORT);
     getHello("pepe");
 });

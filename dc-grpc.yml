@@ -57,7 +57,7 @@ services:
       - "IP_HOST=${IP_HOST}"
     image: http-socket-full-server
     ports:
-      - "5003:5003"
+      - "5002:5002"
     restart: always
   http-socket-simple-client:
     build:
@@ -77,6 +77,6 @@ services:
       - "IP_HOST=${IP_HOST}"
     image: http-socket-simple-server
     ports:
-      - "5002:5002"
+      - "5003:5003"
     restart: always
 version: "3"

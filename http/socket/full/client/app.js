@@ -8,10 +8,11 @@ const eteam = ['Leo', 'Rodri', 'Fran', 'Damian', 'Mati', 'Alex'];
 const logger = require('simple-node-logger').createSimpleLogger();
 
 
+logger.info('http://'+IP_HOST + ':5002')
 
 // Add a connect listener
 socket.on('connect', function (socket) {
-    logger.info('Conexion de cliente (envia)');
+    logger.info('Conexion de cliente (envia) a '+'http://'+IP_HOST+':5002');
 });
 eteam.forEach(person => {
     let start =new Date();
