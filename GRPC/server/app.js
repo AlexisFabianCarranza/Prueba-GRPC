@@ -30,36 +30,55 @@ function main() {
 }
 
 function hello(call, callback) {
-    console.log('---------------------------------------------------------------------------------');
-    logger.info('Comienza una comunicacion simple- Server');
-    let request = call.request;
+    logger.info('---------------------------------------------------------------------------------');
+    logger.info('Simple gRPC - Start - Server');
+    let { name, timeStart } = call.request;
     callback(null,
         {
-            message: 'Hola querido ' + request.name
+            message: 'Hola querido ' + name,
+            timeStart: Date.now()
         });
-    logger.info('Finaliza una comunicacion simple- Server');
+    let responseTime = Date.now() - Number(timeStart);
+    logger.info('Reception Time: ' + responseTime);
+    logger.info('Simple gRPC - End - Server');
+}
+
+function helloClientSide(call, callback) {
+    logger.info('---------------------------------------------------------------------------------');
+    logger.info('Client Side Streaming gRPC - Start - Server');
+    call.on('data', function(feature) {
+        let responseTime = Date.now() - Number(feature.timeStart);
+        logger.info('Reception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
+    });
+    call.on('end', function() {
+        logger.info('Client Side Streaming gRPC - End - Server');
+    });
 }
 
 function helloServerSide(call, callback) {
-    console.log('---------------------------------------------------------------------------------');
-    logger.info('Comienza el streaming del lado del servidor - Servidor');
+    logger.info('---------------------------------------------------------------------------------');
+    logger.info('Server Side Streaming gRPC - Start - Server');
     eteam.forEach(person => {
             call.write( {
-                message: 'Hola querido ' + person + ' / Server Side Streaming'
+                message: 'Hola querido ' + person,
+                timeStart: Date.now()
             });
         }
     );
     call.end();
-    logger.info('Finaliza el streaming del lado del servidor - Cliente');
+    logger.info('Server Side Streaming gRPC - End - Server');
 }
 
 function helloBidirectional(call, callback) {
-    console.log('---------------------------------------------------------------------------------');
+    logger.info('---------------------------------------------------------------------------------');
     logger.info('Comienza el streaming bidireccional - Servidor');
-    call.on('data', function(message) {
-        logger.info('Mensaje obtenido - ' + message.name);
+    call.on('data', function(feature) {
+        let {name, timeStart} = feature;
+        let responseTime = Date.now() - Number(timeStart);
+        logger.info('Reception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
         call.write({
-            message: 'Hola querido ' + message.name
+            message: 'Hola querido ' + name,
+            timeStart: Date.now()
         })
     });
     call.on('end', function() {
@@ -68,15 +87,6 @@ function helloBidirectional(call, callback) {
     });
 }
 
-function helloClientSide(call, callback) {
-    console.log('---------------------------------------------------------------------------------');
-    logger.info('Comienza el streaming del lado del cliente - Servidor');
-    call.on('data', function(feature) {
-        logger.info(feature);
-    });
-    call.on('end', function() {
-        logger.info('Finaliza el streaming del lado del cliente - Servidor');
-    });
-}
+
 
 main();

@@ -4,27 +4,30 @@ const { hello, helloClientSide, helloServerSide, helloBidirectional } = require(
 
 const PORT = 3001;
 
-
 app.get('/simpleRPC/:name', async function (req, res) {
-    let response = await hello(req, res);
-    return res.send(response);
+    await hello(req.params.name);
+    return res.send('See the console');
 });
 
 app.get('/serverSideStreamingRPC/', async function (req, res) {
-    let response = await helloServerSide(req, res);
-    return response;
+    await helloServerSide();
+    return res.send('See the console');
 });
 
 app.get('/clientSideStreamingRPC/', async function (req, res) {
-    let response = await helloClientSide(req, res);
-    return res.send(response);
+    await helloClientSide();
+    return res.send('See the console');
 });
 
 app.get('/bidirectionalStreamingRPC/', async function (req, res) {
-    let response = await helloBidirectional(req, res);
-    return res.send(response);
+    await helloBidirectional();
+    return res.send('See the console');
 });
 
-app.listen(PORT, function () {
+app.listen(PORT, async function () {
     console.log('Example app listening on port ' + PORT);
+    await helloBidirectional();
+    await hello('PEPE el peposo');
+    await helloServerSide();
+    await helloClientSide();
 });

@@ -20,71 +20,74 @@ const packageDefinition = protoLoader.loadSync(
 const greeting_proto = grpc.loadPackageDefinition(packageDefinition).greeting;
 
 
-function hello (req, res) {
+function hello (name) {
         try {
-                logger.info('Comienza una comunicacion simple- Cliente');
+                logger.info('---------------------------------------------------------------------------------');
+                logger.info('Simple gRPC - Start - Client');
                 const client = new greeting_proto.GreetingService(IP_HOST + ':50051',
                     grpc.credentials.createInsecure());
                 return new Promise((resolve, reject) => {
                         client.hello({
-                                name: req.params.name
-                            },
-                            (error, response) => {
-                                    if (error) {
-                                            return reject(error);
-                                    }
-                                    logger.info('Finaliza una comunicacion simple- Cliente');
-                                    return resolve(response);
-                            });
+                                name,
+                                timeStart: Date.now()
+                        }, (error, response) => {
+                                if (error) {
+                                        logger.error(error);
+                                }
+                                let responseTime = Date.now() - Number(response.timeStart);
+                                logger.info('Reception Time: ' + responseTime + ' ml');
+                                logger.info('Simple gRPC - End - Client');
+                                resolve()
+                        });
+                })
+
+        } catch (e) {
+                console.error(e);
+        }
+}
+
+function helloClientSide () {
+        try {
+                logger.info('---------------------------------------------------------------------------------');
+                logger.info('Client Side Streaming gRPC - Start - Client');
+                const client = new greeting_proto.GreetingService(IP_HOST + ':50051',
+                    grpc.credentials.createInsecure());
+                return new Promise((resolve, reject) => {
+                        let call = client.helloClientSide(function(error) {
+                                if (error) {
+                                        reject(error);
+                                }
+                        });
+                        eteam.forEach(person => {
+                                call.write({
+                                        name: person,
+                                        timeStart: Date.now()
+                                });
+                        });
+                        call.end();
+                        logger.info('Client Side Streaming gRPC - End - Client');
+                        resolve()
                 });
         } catch (e) {
                 console.error(e);
         }
 }
 
-function helloClientSide (req, res) {
+function helloServerSide () {
         try {
-                console.log('---------------------------------------------------------------------------------');
-                logger.info('Comienza el streaming del lado del cliente - Cliente');
+                logger.info('---------------------------------------------------------------------------------');
+                logger.info('Server Side Streaming gRPC - Start - Client');
                 const client = new greeting_proto.GreetingService(IP_HOST + ':50051',
                     grpc.credentials.createInsecure());
-                let call = client.helloClientSide(function(error) {
-                        if (error) {
-                                callback(error);
-                        }
-                });
-                eteam.forEach(person => {
-                            call.write({
-                                    name: person
-                            })
-                    }
-                );
-                call.end();
-                logger.info('Finzaliza el streaming del lado del cliente - Cliente');
-                return 'Finalizo la comunicacion GRPC de streaming del lado de cliente - Puede ver el flujo de mensajes en la consola';
-        } catch (e) {
-                console.error(e);
-        }
-}
-
-function helloServerSide (req, res) {
-        try {
-                console.log('---------------------------------------------------------------------------------');
-                logger.info('Comienza el streaming del lado del servidor - Cliente');
-                let cont = 0;
-                const client = new greeting_proto.GreetingService(IP_HOST + ':50051',
-                    grpc.credentials.createInsecure());
-                return new Promise(async (resolve, reject) => {
+                return new Promise((resolve, reject) => {
                         let call = client.helloServerSide({});
                         call.on('data', function(feature) {
-                                logger.info(feature);
-                                cont += 1;
-                                res.write(  '\n' + cont + '. ' +  feature.message);
+                                let responseTime = Date.now() - Number(feature.timeStart);
+                                logger.info('Reception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
                         });
-                        call.on('end', function() {
-                                logger.info('Finaliza el streaming del lado del servidor - Cliente');
-                                cont = 0;
-                                res.end();
+                        call.on('end', () =>  {
+                                logger.info('Server Side Streaming gRPC - End - Client');
+                                resolve();
                         });
                 });
         } catch (e) {
@@ -92,36 +95,38 @@ function helloServerSide (req, res) {
         }
 }
 
-function helloBidirectional (req, res) {
+function helloBidirectional () {
         try {
-                console.log('---------------------------------------------------------------------------------');
-                logger.info('Comienza el streaming bidireccional - Cliente');
+                logger.info('---------------------------------------------------------------------------------');
+                logger.info('Bidirectional Streaming - Start - Client');
                 const client = new greeting_proto.GreetingService(IP_HOST + ':50051',
                     grpc.credentials.createInsecure());
-                let call = client.helloBidirectional(function(error) {
-                        if (error) {
-                                callback(error);
-                        }
+                return new Promise((resolve, reject) => {
+                        let cont = 0;
+                        let call = client.helloBidirectional(function(error) {
+                                if (error) {
+                                        logger.error(error);
+                                }
+                        });
+                        eteam.forEach(person => {
+                                call.write({
+                                        name: person,
+                                        timeStart: Date.now()
+                                })
+                        });
+                        call.on('data', function(feature) {
+                                let responseTime = Date.now() - Number(feature.timeStart);
+                                logger.info('Reception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
+                                cont += 1;
+                                if ( cont === eteam.length) call.end(); //Condicion de corte para el streaming
+                        });
+                        call.on('end', function() {
+                                logger.info('Bidirectional Streaming - End - Client');
+                                cont = 0;
+                                call.end();
+                                resolve()
+                        });
                 });
-                let cont = 0;
-                eteam.forEach(person => {
-                            call.write({
-                                    name: person
-                            })
-                    }
-                );
-                call.on('data', function(feature) {
-                        logger.info(feature);
-                        cont += 1;
-                        if ( cont === eteam.length) call.end(); //Condicion de corte para el streaming
-                });
-                call.on('end', function() {
-                        logger.info('Finaliza el streaming del lado del servidor - Cliente');
-                        cont = 0;
-                        call.end();
-
-                });
-                if ( cont === 0 ) return 'Finalizo la comunicacion GRPC bidireccional - Puede ver el flujo de mensajes en la consola';
         } catch (e) {
                 console.error(e);
         }
