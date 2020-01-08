@@ -27,8 +27,6 @@ services:
     environment:
       - "IP_HOST=${IP_HOST}"
     image: http-get-client
-    ports:
-      - "5000:5000"
     restart: always
   http-get-server:
     build:
@@ -54,7 +52,7 @@ services:
     build:
       context: http/socket/full
       dockerfile: server/dockerfile-server.Dockerfile
-    container_name: grpc-client
+    container_name: http-socket-full-server
     environment:
       - "IP_HOST=${IP_HOST}"
     image: " http-socket-full-server"
@@ -74,7 +72,7 @@ services:
     build:
       context: http/socket/simple
       dockerfile: server/dockerfile-server.Dockerfile
-    container_name: grpc-server
+    container_name: http-socket-simple-server
     environment:
       - "IP_HOST=${IP_HOST}"
     image: http-socket-simple-server

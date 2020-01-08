@@ -1,11 +1,11 @@
 FROM node:8
 
-COPY ["./client", "/usr/src/"]
+COPY ["./server", "/usr/src/"]
 
 WORKDIR /usr/src
 
 RUN npm install
 
-EXPOSE 50051
+EXPOSE 5003
 
 CMD npm run dev
