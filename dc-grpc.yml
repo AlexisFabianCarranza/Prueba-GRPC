@@ -55,7 +55,7 @@ services:
     container_name: http-socket-full-server
     environment:
       - "IP_HOST=${IP_HOST}"
-    image: " http-socket-full-server"
+    image: http-socket-full-server
     ports:
       - "5003:5003"
     restart: always
