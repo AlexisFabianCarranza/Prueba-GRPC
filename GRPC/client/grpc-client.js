@@ -35,7 +35,7 @@ function hello (name) {
                                         logger.error(error);
                                 }
                                 let responseTime = Date.now() - Number(response.timeStart);
-                                logger.info('Reception Time: ' + responseTime + ' ml');
+                                logger.info('\tReception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(response));
                                 logger.info('Simple gRPC - End - Client');
                                 resolve()
                         });
@@ -83,7 +83,7 @@ function helloServerSide () {
                         let call = client.helloServerSide({});
                         call.on('data', function(feature) {
                                 let responseTime = Date.now() - Number(feature.timeStart);
-                                logger.info('Reception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
+                                logger.info('\tReception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
                         });
                         call.on('end', () =>  {
                                 logger.info('Server Side Streaming gRPC - End - Client');
@@ -116,7 +116,7 @@ function helloBidirectional () {
                         });
                         call.on('data', function(feature) {
                                 let responseTime = Date.now() - Number(feature.timeStart);
-                                logger.info('Reception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
+                                logger.info('\tReception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
                                 cont += 1;
                                 if ( cont === eteam.length) call.end(); //Condicion de corte para el streaming
                         });

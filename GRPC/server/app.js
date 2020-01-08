@@ -39,7 +39,7 @@ function hello(call, callback) {
             timeStart: Date.now()
         });
     let responseTime = Date.now() - Number(timeStart);
-    logger.info('Reception Time: ' + responseTime);
+    logger.info('\tReception Time: ' + responseTime);
     logger.info('Simple gRPC - End - Server');
 }
 
@@ -48,7 +48,7 @@ function helloClientSide(call, callback) {
     logger.info('Client Side Streaming gRPC - Start - Server');
     call.on('data', function(feature) {
         let responseTime = Date.now() - Number(feature.timeStart);
-        logger.info('Reception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
+        logger.info('\tReception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
     });
     call.on('end', function() {
         logger.info('Client Side Streaming gRPC - End - Server');
@@ -75,7 +75,7 @@ function helloBidirectional(call, callback) {
     call.on('data', function(feature) {
         let {name, timeStart} = feature;
         let responseTime = Date.now() - Number(timeStart);
-        logger.info('Reception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
+        logger.info('\tReception Time: ' + responseTime + ' ml - Message: '+ JSON.stringify(feature));
         call.write({
             message: 'Hola querido ' + name,
             timeStart: Date.now()
