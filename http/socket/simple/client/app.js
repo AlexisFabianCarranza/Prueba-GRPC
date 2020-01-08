@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 //client.js
 var io = require('socket.io-client');
-var socket = io.connect('http://localhost:3000', {reconnect: true});
+const IP_HOST = process.env.IP_HOST || '0.0.0.0';
+var socket = io.connect('http://'+IP_HOST + ':5003', {reconnect: true});
 const eteam = ['Leo', 'Rodri', 'Fran', 'Damian', 'Mati', 'Alex'];
 const logger = require('simple-node-logger').createSimpleLogger();
 

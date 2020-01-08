@@ -1,0 +1,84 @@
+services:
+  grpc-client:
+    build:
+      context: GRPC
+      dockerfile: client/dockerfile-client.Dockerfile
+    container_name: grpc-client
+    environment:
+      - "IP_HOST=${IP_HOST}"
+    image: "grpc-cli:grpc-cli"
+    ports:
+      - "3001:3001"
+    restart: always
+  grpc-server:
+    build:
+      context: GRPC
+      dockerfile: server/dockerfile-server.Dockerfile
+    container_name: grpc-server
+    image: "grpc-server:grpc-server"
+    ports:
+      - "50051:50051"
+    restart: always
+  http-get-client:
+    build:
+      context: http/get
+      dockerfile: client/dockerfile-client.Dockerfile
+    container_name: http-get-client
+    environment:
+      - "IP_HOST=${IP_HOST}"
+    image: http-get-client
+    ports:
+      - "5000:5000"
+    restart: always
+  http-get-server:
+    build:
+      context: http/get
+      dockerfile: server/dockerfile-server.Dockerfile
+    container_name: http-get-server
+    environment:
+      - "IP_HOST=${IP_HOST}"
+    image: http-get-server
+    ports:
+      - "5001:5001"
+    restart: always
+  http-socket-full-client:
+    build:
+      context: http/socket/full
+      dockerfile: client/dockerfile-client.Dockerfile
+    container_name: http-socket-full-client
+    environment:
+      - "IP_HOST=${IP_HOST}"
+    image: http-socket-full-client
+    restart: always
+  http-socket-full-server:
+    build:
+      context: http/socket/full
+      dockerfile: server/dockerfile-server.Dockerfile
+    container_name: grpc-client
+    environment:
+      - "IP_HOST=${IP_HOST}"
+    image: " http-socket-full-server"
+    ports:
+      - "5003:5003"
+    restart: always
+  http-socket-simple-client:
+    build:
+      context: http/socket/simple
+      dockerfile: client/dockerfile-client.Dockerfile
+    container_name: http-socket-simple-clientt
+    environment:
+      - "IP_HOST=${IP_HOST}"
+    image: http-socket-simple-client
+    restart: always
+  http-socket-simple-server:
+    build:
+      context: http/socket/simple
+      dockerfile: server/dockerfile-server.Dockerfile
+    container_name: grpc-server
+    environment:
+      - "IP_HOST=${IP_HOST}"
+    image: http-socket-simple-server
+    ports:
+      - "5002:5002"
+    restart: always
+version: "3"
