@@ -1,4 +1,5 @@
-const PROTO_PATH = '../greeting.proto';
+//const PROTO_PATH = '../greeting.proto';
+const PROTO_PATH = '/usr/src/node_modules/proto-npm/greeting.proto';
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 const logger = require('simple-node-logger').createSimpleLogger();
