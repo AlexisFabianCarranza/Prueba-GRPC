@@ -1,3 +1,4 @@
+version: "3"
 services:
   grpc-client:
     build:
@@ -6,9 +7,13 @@ services:
     container_name: grpc-client
     environment:
       - "IP_HOST=${IP_HOST}"
+    depends_on:
+      - grpc-server
     image: "grpc-cli:grpc-cli"
     ports:
       - "3001:3001"
+    networks:
+      - grpc
     restart: always
   grpc-server:
     build:
@@ -18,6 +23,8 @@ services:
     image: "grpc-server:grpc-server"
     ports:
       - "50051:50051"
+    networks:
+      - grpc
     restart: always
   http-get-client:
     build:
@@ -79,4 +86,5 @@ services:
     ports:
       - "5003:5003"
     restart: always
-version: "3"
+networks:
+  grpc: {}

@@ -4,7 +4,7 @@ const protoLoader = require('@grpc/proto-loader');
 const logger = require('simple-node-logger').createSimpleLogger();
 const eteam = ['Leo' , 'Rodri', 'Fran', 'Damian', 'Mati', 'Alex'];
 
-const IP_HOST = process.env.IP_HOST || '0.0.0.0';
+const IP_HOST = process.env.IP_HOST || 'grpc-server';
 
 const packageDefinition = protoLoader.loadSync(
     PROTO_PATH,
